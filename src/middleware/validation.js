@@ -1,0 +1,48 @@
+const User = require("../models/userModel");
+
+const validationRegister = ((req, res, next) => {
+    const { firstName, lastName, birthDate, email, contact, password, role } = req.body;
+
+    if(!firstName || !lastName || !birthDate || !email || !contact || !password || !role) {
+        return res.json({ message: "All Fields are Required..." });
+    }
+
+    const emailValid = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.com$/;
+    if(!emailValid.test(email)) {
+        return res.json({ message: "Invalid Email" });
+    }
+
+    const numberValid = /^[0-9]{10}$/;
+    if(!numberValid.test(contact)) {
+        return res.json({ message: "Invalid Mobile Number" });
+    }
+
+    if(password.length < 5)
+    {
+        return res.json({ message: "Password must be at least 5 in Length" })
+    }
+
+    next();
+})
+
+const validationLogin = ((req, res, next) => {
+    const { userName, password } = req.body;
+    if(!userName) {
+        return res.json({message: "Email or Contact are Required..." });
+    }
+
+    if(!password) {
+        return res.json({message: "Passowrd are Required..." });
+    }
+
+    const emailValid = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.com$/;
+    const numberValid = /^[0-9]{10}$/;
+
+    if(!emailValid.test(userName) && !numberValid.test(userName)) {
+        return res.json({ message: "Invalid Email or Mobile Number" });
+    }
+
+    next();
+});
+
+module.exports = { validationRegister, validationLogin }
