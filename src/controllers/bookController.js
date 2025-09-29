@@ -14,51 +14,6 @@ const createBook = async (req, res) => {
     }
 }
 
-// const allBook = async (req, res) => {
-//     try {
-        
-//         let books;
-
-//         if(req.query.author) {
-//             books = await Book.aggregate([
-//                 {
-//                     $match: {
-//                         author: req.query.author
-//                     }
-//                 },
-//                 {
-//                     $group: { 
-//                         _id: "$author",
-//                         "Books": { $push: "$title"}
-//                     }
-//                 }
-//             ])
-//         } else if (req.query.title) {
-//             books = await Book.aggregate([
-//                 {
-//                     $match: {
-//                         title: req.query.title
-//                     }
-//                 },
-//                 {
-//                     $group: {
-//                         _id: "title",
-//                         "Author": { $push: "$author" }
-//                     }
-//                 }
-//             ])
-//         } else {
-//             const limit = parseInt(req?.query?.limit || 5);
-//             const skip = parseInt(req?.query?.skip || 0);
-//             books = await Book.find().skip(skip).limit(limit);
-//         }
-
-//         res.json(books);
-//     } catch (error) {
-//         res.json(error);
-//     }
-// }
-
 const allBook = async (req, res) => {
     try {
         const limit = parseInt(req?.query?.limit || 5);
