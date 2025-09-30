@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 require('../models/userModel.js');
 
-
 function verifyToken(req, res, next) {
     let token = req.headers['authorization'];
     if (token && token.startsWith('Bearer ')) {

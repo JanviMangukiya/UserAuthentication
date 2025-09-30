@@ -82,7 +82,6 @@ const getId = async(req, res) => {
     }
 }
 
-
 const updateBook = async(req, res) => {
     try {
         const { id } = req.params;
@@ -108,6 +107,5 @@ const deleteBook = async(req, res) => {
     }
     
 }
-
 
 module.exports = { createBook, allBook, getId, updateBook, deleteBook };
