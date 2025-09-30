@@ -19,7 +19,6 @@ const register = async(req, res) => {
             return res.json({message: "Contact is Already Register"});
         }
 
-
         const roles = await Role.findOne({ roleName: role });
         if (!roles) {
             return res.status(400).json({message: "Invalid role specified. User not created."});
@@ -42,15 +41,13 @@ const register = async(req, res) => {
 const login = async(req, res) => {
    try {
         const { userName, password } = req.body;
-        const user = await User.findOne({ 
-            $or: [
-                { email: userName },
-                { contact: userName}
-            ]
-         });
-    if(!user) {
-        return res.json({message: "User is not Registered"});
-    }
+        const user = await User.findOne({ $or: [{ email: userName }, 
+            { contact: userName}] });
+
+        if(!user) {
+            return res.json({message: "User is not Registered"});
+        }
+
         const isMatch = await bcrypt.compare(password, user.password);
         if(!isMatch) {
             return res.json({message: "Invalid Password"});

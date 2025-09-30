@@ -23,7 +23,7 @@ const validationRegister = ((req, res, next) => {
     }
 
     next();
-})
+});
 
 const validationLogin = ((req, res, next) => {
     const { userName, password } = req.body;

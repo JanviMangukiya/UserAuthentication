@@ -25,41 +25,16 @@ const allBook = async (req, res) => {
         let sortOrder = parseInt(req?.query?.sortOrder || 1);
 
         if (req.query.title && req.query.author) {
-            filter = {
-                $or: [
-                    { 
-                        title: 
-                        { 
-                            $regex: req.query.title, 
-                            $options: "i" 
-                        } 
-                    },
-                    { 
-                        author: 
-                        {
-                             $regex: req.query.author, 
-                             $options: "i" 
-                        } 
-                    }
-                ]
-            }
-        } else if (req.query.title) {
-            filter = { 
-                title: 
-                {
-                    $regex: req.query.title, 
-                    $options: "i" 
-                }
-            };
-        } else if (req.query.author) {
-            filter = { 
-                author: 
-                {
-                    $regex: req.query.author, 
-                    $options: "i" 
-                } 
-            };
+            filter.$or = [ { title: { $regex: req.query.title, $options: "i" } }, 
+                { author: { $regex: req.query.author, $options: "i" } } ]
+        } 
+        else if (req.query.title) {
+            filter = { title: { $regex: req.query.title, $options: "i" } };
+        } 
+        else if (req.query.author) {
+            filter = { author: { $regex: req.query.author, $options: "i" } };
         }
+        
         sortBook[sortField] = sortOrder;
 
         const books = await Book.find(filter).skip(skip).limit(limit).sort(sortBook);
