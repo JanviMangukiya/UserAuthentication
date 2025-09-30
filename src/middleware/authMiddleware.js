@@ -28,7 +28,7 @@ function checkRole(allowRole) {
         if (req.user.role && typeof req.user.role === 'string') {
             const roleDoc = await Role.findById(req.user.role);
             roleName = roleDoc.roleName;
-        } else {
+        } else {    
             roleName = req.user.role;
         }
     
