@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 require('../models/userModel.js');
-//require('../models/roleModel.js');
 
 
 function verifyToken(req, res, next) {
@@ -8,7 +7,7 @@ function verifyToken(req, res, next) {
     if (token && token.startsWith('Bearer ')) {
         token = token.slice(7); 
     }
-   //console.log("token", token);
+ 
    if(!token) {
     return res.json({message: "Token Not Found"});
    }
@@ -33,8 +32,7 @@ function checkRole(allowRole) {
         } else {
             roleName = req.user.role;
         }
-        // console.log(roleName);
-        // console.log(allowRole);
+    
         if (!allowRole.includes(roleName)) {
             return res.json({message: "You don't have Permission"});
         }

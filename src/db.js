@@ -3,9 +3,8 @@ const mongoose = require("mongoose");
 
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {
-    //console.log(process.env.MONGO_URI)
     console.log('Connected to MongoDB');
 })
 .catch((error) => {
-    //console.log('Error : Connected to MongoDB', error.message);
+    console.log('Error : Connected to MongoDB', error.message);
 });

@@ -21,7 +21,6 @@ const register = async(req, res) => {
 
 
         const roles = await Role.findOne({ roleName: role });
-        //console.log(roles);
         if (!roles) {
             return res.status(400).json({message: "Invalid role specified. User not created."});
         }
@@ -34,7 +33,6 @@ const register = async(req, res) => {
             password: hash_password,
             role: roles.id
         });
-        //console.log(user);
         return res.json({message: "User Registered Successfully"});
     } catch (error) {
         return res.json({message: "Error in Registration", error});
