@@ -6,7 +6,6 @@ const createBook = async (req, res) => {
             title: req.body.title,
             author: req.body.author
         });
-        //console.log(newBook);
         res.json(newBook);
         
     } catch (error) {
@@ -61,14 +60,6 @@ const allBook = async (req, res) => {
                 } 
             };
         }
-
-        // if(sortField) {
-        //     if(sortOrder !== 1 && sortOrder !== -1) {
-        //         sortOrder = 1;
-        //     }
-        //     
-        // }
-
         sortBook[sortField] = sortOrder;
 
         const books = await Book.find(filter).skip(skip).limit(limit).sort(sortBook);

@@ -1,4 +1,4 @@
-/node_modules
+/node_modules/
+.git/
 .env
-/package-lock.json
-/.git
+package-lock.json
