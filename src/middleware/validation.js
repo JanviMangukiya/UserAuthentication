@@ -17,8 +17,7 @@ const validationRegister = ((req, res, next) => {
         return res.json({ message: "Invalid Mobile Number" });
     }
 
-    if(password.length < 5)
-    {
+    if(password.length < 5) {
         return res.json({ message: "Password must be at least 5 in Length" })
     }
 

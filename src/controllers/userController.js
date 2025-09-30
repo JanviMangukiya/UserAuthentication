@@ -65,16 +65,11 @@ const login = async(req, res) => {
 
 const createRole = async (req, res) => {
     const { roleName } = req.body;
-    const allow = [];
     try {
         const newRole = await Role.create({ roleName });
-        console.log(newRole);
         return res.json(newRole);
     } catch (error) {
-        if(!allow.includes(roleName)) {
-            return res.json({message: "Invalid Rolename"})
-        }
-        res.json({message: "Error in Creating Role", error});
+        return res.json({message: "Error in Creating Role", error});
     }
 }
 
