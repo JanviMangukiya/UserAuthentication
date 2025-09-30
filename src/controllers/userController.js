@@ -23,7 +23,7 @@ const register = async(req, res) => {
         if (!roles) {
             return res.status(400).json({message: "Invalid role specified. User not created."});
         }
-        const user = await User.create({
+        await User.create({
             firstName, 
             lastName, 
             birthDate, 
@@ -41,8 +41,12 @@ const register = async(req, res) => {
 const login = async(req, res) => {
    try {
         const { userName, password } = req.body;
-        const user = await User.findOne({ $or: [{ email: userName }, 
-            { contact: userName}] });
+        const user = await User.findOne({
+            $or: [
+                { email: userName }, 
+                { contact: userName}
+            ]
+        });
 
         if(!user) {
             return res.json({message: "User is not Registered"});

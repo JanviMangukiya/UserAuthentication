@@ -3,7 +3,9 @@ const app = express.Router();
 const bookController = require('../controllers/bookController');
 const { verifyToken, checkRole } = require('../middleware/authMiddleware');
 
-app.get('/', verifyToken, bookController.allBook);
+app.get('/', bookController.allBook);
+
+//app.get('/', verifyToken, bookController.allBook);
 
 app.post('/', verifyToken, checkRole(['admin', 'author']), bookController.createBook);
 

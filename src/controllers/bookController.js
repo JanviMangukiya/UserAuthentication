@@ -6,8 +6,7 @@ const createBook = async (req, res) => {
             title: req.body.title,
             author: req.body.author
         });
-        res.json(newBook);
-        
+        res.json(newBook);    
     } catch (error) {
         res.json(error);
     }
@@ -21,25 +20,28 @@ const allBook = async (req, res) => {
         let filter = {};
         let sortBook = {};
 
-        const sortField = req.query.sortField;
+        const { title, author } = req.query;
+
+        const { sortField } = req.query;
         let sortOrder = parseInt(req?.query?.sortOrder || 1);
 
-        if (req.query.title && req.query.author) {
-            filter.$or = [ { title: { $regex: req.query.title, $options: "i" } }, 
-                { author: { $regex: req.query.author, $options: "i" } } ]
+        if (title && author) {
+            filter.$or = [
+                { title: { $regex: title, $options: "i" }}, 
+                { author: { $regex: author, $options: "i" }}
+            ]
         } 
-        else if (req.query.title) {
-            filter = { title: { $regex: req.query.title, $options: "i" } };
+        else if (title) {
+            filter = { title: { $regex: title, $options: "i" }};
         } 
-        else if (req.query.author) {
-            filter = { author: { $regex: req.query.author, $options: "i" } };
+        else if (author) {
+            filter = { author: { $regex: author, $options: "i" }};
         }
-        
+
         sortBook[sortField] = sortOrder;
 
         const books = await Book.find(filter).skip(skip).limit(limit).sort(sortBook);
         res.json(books);
-
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -73,14 +75,14 @@ const updateBook = async(req, res) => {
 
 const deleteBook = async(req, res) => {
     try {
-        const books = await Book.findByIdAndDelete(req.params.id);
+        const { id } = req.params;
+        const books = await Book.findByIdAndDelete(id);
         if(!books) {
             return res.json({message: "Book not Found or Deleted..."});
         } res.json({message: "Book Deleted Successfully ..."});
     } catch (error) {
         res.json(error);
-    }
-    
+    }    
 }
 
 module.exports = { createBook, allBook, getId, updateBook, deleteBook };
