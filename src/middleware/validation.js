@@ -34,6 +34,7 @@ const validationLogin = ((req, res, next) => {
     if(!password) {
         return res.json({message: "Password are Required..." });
     }
+
     if(!emailValid.test(userName) && !numberValid.test(userName)) {
         return res.json({ message: "Invalid Email or Mobile Number" });
     }
