@@ -1,5 +1,8 @@
 const User = require("../models/userModel");
 
+const emailValid = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.com$/;
+const numberValid = /^[0-9]{10}$/;
+
 const validationRegister = ((req, res, next) => {
     const { firstName, lastName, birthDate, email, contact, password, role } = req.body;
 
@@ -7,12 +10,10 @@ const validationRegister = ((req, res, next) => {
         return res.json({ message: "All Fields are Required..." });
     }
 
-    const emailValid = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.com$/;
     if(!emailValid.test(email)) {
         return res.json({ message: "Invalid Email" });
     }
 
-    const numberValid = /^[0-9]{10}$/;
     if(!numberValid.test(contact)) {
         return res.json({ message: "Invalid Mobile Number" });
     }
@@ -33,9 +34,6 @@ const validationLogin = ((req, res, next) => {
     if(!password) {
         return res.json({message: "Passowrd are Required..." });
     }
-
-    const emailValid = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.com$/;
-    const numberValid = /^[0-9]{10}$/;
 
     if(!emailValid.test(userName) && !numberValid.test(userName)) {
         return res.json({ message: "Invalid Email or Mobile Number" });
