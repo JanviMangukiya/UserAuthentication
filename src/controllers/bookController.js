@@ -20,11 +20,7 @@ const allBook = async (req, res) => {
 
         let filter = {};
         let sortBook = {};
-
-        const { title, author } = req.query;
-
-        const { sortField } = req.query;
-        let sortOrder = parseInt(req?.query?.sortOrder || 1);
+        const { title, author, sortField, sortOrder } = req.query;
 
         if (title && author) {
             filter.$or = [
@@ -39,7 +35,7 @@ const allBook = async (req, res) => {
             filter = { author: { $regex: author, $options: "i" }};
         }
 
-        sortBook[sortField] = sortOrder;
+        sortBook[sortField] = parseInt(sortOrder || 1);
 
         try {
             const books = await Book.find(filter).skip(skip).limit(limit).sort(sortBook);
