@@ -24,9 +24,10 @@ const register = async(req, res) => {
         } catch (error) {
             return errorHandle('', res, "Not Found", 404, error.message);
         }
-        
+
+        let roles;
         try {
-            const roles = await Role.findOne({ roleName: role });
+            roles = await Role.findOne({ roleName: role });
             if (!roles) {
                 return errorHandle('', res, "Invalid Role Specified", 400, error.message);
             }
