@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-require('../models/userModel.js');
 const Role = require('../models/roleModel');
+const { errorHandle } = require('../helper/helper');
 
 function verifyToken(req, res, next) {
     let token = req.headers['authorization'];
@@ -9,16 +9,15 @@ function verifyToken(req, res, next) {
     }
     
     if(!token) {
-        return res.json({message: "Token Not Found"});
+        return errorHandle('', res, "Token Not Found", 404, error.message);
     }
     try {
         const decoded = jwt.verify(token, process.env.SECRET_KEY);
         req.user = decoded;
-        req.user.role = decoded.role;
-        
+        req.user.role = decoded.role; 
         next();   
     } catch (error) {
-        res.json({message: "Invalid Token"});
+        return errorHandle('', res, "Invalid Token", 422, error.message);
     }
 }
 
@@ -27,14 +26,18 @@ function checkRole(allowRole) {
         const { role } = req.user;
         let roleName;
         if (role && typeof role === 'string') {
-            const roleDoc = await Role.findById(role);
-            roleName = roleDoc.roleName;
+            try {
+                const roleDoc = await Role.findById(role);
+                roleName = roleDoc.roleName;
+            } catch (error) {
+             return errorHandle('', res, "Somthing Wrong in Role", 500, error.message);   
+            }
         } else {
             roleName = role;
         }
     
         if (!allowRole.includes(roleName)) {
-            return res.json({message: "You don't have Permission"});
+            return errorHandle('', res, "You don't have Permission", 403, error.message);
         }
         next();
     }
