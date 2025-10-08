@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login with Google</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </head>
+
+  <body>
+    <h2>Login with Google</h2>
+    <div 
+    id="g_id_onload"
+    data-client_id="873515604703-n8t259792qclh1kefn15q7anls5nie7r.apps.googleusercontent.com"
+    data-callback="handleLogin">
+    </div>
+
+    <div id="btn"></div>
+
+    <script>
+        function renderButtons() {
+            const jwtToken = localStorage.getItem('jwtToken');
+            const container = document.getElementById('btn');
+            
+            container.innerHTML = '';
+
+            if(jwtToken) {
+                const logoutBtn = document.createElement('button');
+                logoutBtn.id = 'logout-btn';
+                logoutBtn.textContent = 'Logout';
+                logoutBtn.onclick = handleSignOut;
+                container.appendChild(logoutBtn);
+            } else {
+                const loginBtn = document.createElement('div');
+                loginBtn.id = 'login-btn';
+                loginBtn.className = 'g_id_signin';
+                container.appendChild(loginBtn);
+                
+                if (window.google && window.google.accounts) {
+                    window.google.accounts.id.renderButton(
+                        document.getElementById('login-btn'),
+                        { theme: 'outline', size: 'large' }
+                    );
+                }
+            }
+        }
+        window.onload = renderButtons;
+
+        async function handleLogin(response) {
+            try {
+                const credential = response?.credential;
+                const res = await fetch(
+                    "https://curliest-maurine-fluoroscopically.ngrok-free.dev/user/google-login",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ token: credential })
+                    });
+                const data = await res.json();
+                console.log("Login Response", data);
+                if (data.data || data.message === "Login Successfully") {
+                    localStorage.setItem('jwtToken', data.data);
+                    localStorage.setItem('googleCredential', credential);
+                    renderButtons();
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        async function handleSignOut() {
+            try {
+                const jwtToken = localStorage.getItem('jwtToken');
+                const googleCredential = localStorage.getItem('googleCredential');
+                if (jwtToken) {
+                    try {
+                        const res = await fetch(
+                            "https://curliest-maurine-fluoroscopically.ngrok-free.dev/user/google-logout",
+                            {
+                                method: "POST",
+                                headers: {  
+                                    "Content-Type": "application/json", 
+                                    "Authorization": `Bearer ${jwtToken}`
+                                },
+                                body: JSON.stringify({ token: googleCredential })
+                            });
+                        const data = await res.json();
+                        console.log("Logout Response", data);
+                    } catch (error) {
+                        console.log("Server Logout Failed", error);
+                    }
+                }
+                localStorage.removeItem('jwtToken');
+                localStorage.removeItem('googleCredential'); 
+                renderButtons();  
+            } catch (error) {
+                console.error("Error", error);
+            }
+        }
+    </script>
+  </body>
+</html>
