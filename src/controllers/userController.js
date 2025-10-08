@@ -105,7 +105,7 @@ const googleLogin = async (req, res) => {
         
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: process.env.GOOGLE_CLIENT_ID || "873515604703-n8t259792qclh1kefn15q7anls5nie7r.apps.googleusercontent.com"
+            audience: process.env.GOOGLE_CLIENT_ID 
         });
 
         const payload = ticket.getPayload();
@@ -130,7 +130,7 @@ const googleLogin = async (req, res) => {
         }
         const jwtToken = jwt.sign(
             { id: user._id, email: user.email },
-            process.env.SECRET_KEY || "ad171223418a553241f38ee7487a600130d3b9b0bc6a069b31c28231cd40eff8",
+            process.env.SECRET_KEY,
             { expiresIn: '1h' }
         );
         return successHandle('', res, "Login Successfully", 200, jwtToken);
@@ -150,7 +150,7 @@ const googleLogout = async (req, res) => {
             try {
                 await client.verifyIdToken({
                     idToken: token,
-                    audience: process.env.GOOGLE_CLIENT_ID || "873515604703-n8t259792qclh1kefn15q7anls5nie7r.apps.googleusercontent.com"
+                    audience: process.env.GOOGLE_CLIENT_ID 
                 });
                 return successHandle('', res, "Logout Successfully", 200, '');
             } catch (error) {
