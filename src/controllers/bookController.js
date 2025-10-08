@@ -1,4 +1,4 @@
-const Book = require('../../../User_Authentication/src/models/bookModel');
+const Book = require('../models/bookModel');
 const { successHandle, errorHandle } = require('../helper/helper');
 
 const createBook = async (req, res) => {

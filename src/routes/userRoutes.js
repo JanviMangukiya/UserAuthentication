@@ -9,6 +9,10 @@ app.post('/register', userValidation.validationRegister, userController.register
 
 app.post('/login', userValidation.validationLogin, userController.login);
 
+app.post('/google-login', userController.googleLogin);
+
+app.post('/google-logout', verifyToken, userController.googleLogout);
+
 app.post('/role', userController.createRole);
 
 app.get('/', verifyToken, (req, res) => {
